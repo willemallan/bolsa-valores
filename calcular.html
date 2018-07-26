@@ -1,0 +1,303 @@
+<html>
+    <head>
+        <!-- Latest compiled and minified CSS -->
+        <style type="text/css" media="screen">
+            * {
+                font-size: 18px;
+            }    
+            .clear{
+                clear:both;
+            }
+        </style>
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+
+        <!-- Latest compiled and minified JavaScript -->
+        <!--<script src="bootstrap/js/bootstrap.min.js"></script>-->
+        <script src="js/jquery.min.js"></script>
+        <script src="js/jquery.price_format.min.js"></script>
+        <script>
+            $(function() {
+
+                function convert_float(valor){
+                    return parseFloat(valor.replace('R$ ', '').replace('.', '').replace(',', '.')).toFixed(2);
+                }    
+
+                function taxa(total){
+
+                    if(total <= 135.07){
+                        return (2.7).toFixed(2);
+                    } else if(total >= 135.08 && total <= 498.62){
+                        return (total/100*2).toFixed(2);
+                    } else if(total >= 498.63 && total <= 1514.69){
+                        return (total/100*1.5+2.49).toFixed(2);
+                    } else if(total >= 1514.70 && total <= 3029.28){
+                        return (total/100*1+10.06).toFixed(2);
+                    } else if(total >= 3029.39){
+                        return (total/100*0.5+25.21).toFixed(2);
+                    }
+                    return total;
+                }
+
+                $('#compra').priceFormat({
+                    prefix: 'R$ ',
+                    centsSeparator: ',',
+                    thousandsSeparator: '.'
+                });
+                $('#venda').priceFormat({
+                    prefix: 'R$ ',
+                    centsSeparator: ',',
+                    thousandsSeparator: '.'
+                });
+                $('#total_compra').priceFormat({
+                    prefix: 'R$ ',
+                    centsSeparator: ',',
+                    thousandsSeparator: '.'
+                });
+                $('#total_venda').priceFormat({
+                    prefix: 'R$ ',
+                    centsSeparator: ',',
+                    thousandsSeparator: '.'
+                });
+                $('#porc').priceFormat({
+                    prefix: '',
+                    centsSeparator: '.',
+                    thousandsSeparator: ''
+                });
+                $('#porc_lucro2').priceFormat({
+                    prefix: '',
+                    centsSeparator: '.',
+                    thousandsSeparator: ''
+                });
+                $('#porc2').priceFormat({
+                    prefix: '',
+                    centsSeparator: '.',
+                    thousandsSeparator: ''
+                });
+
+                $( "#calcular" ).click(function() {
+                    var compra = convert_float($("#compra").val());
+                    var venda = convert_float($("#venda").val());
+                    var quantidade = parseFloat($("#quantidade").val());
+                    var porc = parseFloat($("#porc").val());
+                    var total_compra = (compra * quantidade).toFixed(2);
+                    var total_venda = (venda * quantidade).toFixed(2);
+                    // console.log(compra);
+                    // console.log(venda);
+                    // console.log(quantidade);
+                    // console.log(total_compra);
+                    // console.log(total_venda);
+                    var porcentagem = (((100 * total_venda)/total_compra)-100).toFixed(2);
+                    // console.log(porcentagem)
+                    var taxa_valor = taxa(total_compra);
+                    var lucro = (total_venda - total_compra - taxa_valor).toFixed(2);
+                    var lucro_total = (total_venda - total_compra).toFixed(2);
+
+                    if( lucro > 0 ){
+                        $("#labelLucroPerda").html('Lucro');   
+                        $("#labelLucroPerda").css('color', 'green');
+                        
+                    } else if( lucro < 0 ) {
+                        $("#labelLucroPerda").html('Perda');
+                        $("#labelLucroPerda").css('color', 'red');
+                    } else {
+                        $("#labelLucroPerda").html('Neutro');
+                        $("#labelLucroPerda").css('color', 'blue');
+                    }
+                    if( lucro_total > 0 ){
+                        $("#labelLucroPerdaTotal").html('Lucro sem taxa');   
+                        $("#labelLucroPerdaTotal").css('color', 'green');
+                        
+                    } else if( lucro_total < 0 ) {
+                        $("#labelLucroPerdaTotal").html('Prejuizo sem taxa');
+                        $("#labelLucroPerdaTotal").css('color', 'red');
+                    } else {
+                        $("#labelLucroPerdaTotal").html('Total sem taxa');
+                        $("#labelLucroPerdaTotal").css('color', 'blue');
+                    }
+
+                    $("#total_compra").val(total_compra);
+                    $("#total_venda").val(total_venda);
+                    $("#taxa").val(taxa_valor);
+                    $("#porcentagem").val(porcentagem);
+                    $("#lucro").val(lucro);
+                    $("#lucro_total").val(lucro_total);
+
+                    $('#total_compra').priceFormat({
+                        prefix: 'R$ ',
+                        centsSeparator: ',',
+                        thousandsSeparator: '.'
+                    });
+                    $('#total_venda').priceFormat({
+                        prefix: 'R$ ',
+                        centsSeparator: ',',
+                        thousandsSeparator: '.'
+                    });
+                    $('#taxa').priceFormat({
+                        prefix: 'R$ ',
+                        centsSeparator: ',',
+                        thousandsSeparator: '.'
+                    });
+                    $('#porcentagem').priceFormat({
+                        prefix: '% ',
+                        centsSeparator: ',',
+                        thousandsSeparator: '.'
+                    });
+                    $('#lucro').priceFormat({
+                        prefix: 'R$ ',
+                        centsSeparator: ',',
+                        thousandsSeparator: '.'
+                    });
+                    $('#lucro_total').priceFormat({
+                        prefix: 'R$ ',
+                        centsSeparator: ',',
+                        thousandsSeparator: '.'
+                    });
+
+                });
+
+                $('#compra2').priceFormat({
+                    prefix: 'R$ ',
+                    centsSeparator: ',',
+                    thousandsSeparator: '.'
+                });
+                $('#total_compra2').priceFormat({
+                    prefix: 'R$ ',
+                    centsSeparator: ',',
+                    thousandsSeparator: '.'
+                });
+                $('#total_venda2').priceFormat({
+                    prefix: 'R$ ',
+                    centsSeparator: ',',
+                    thousandsSeparator: '.'
+                });
+
+                $( "#calcular2" ).click(function() {
+                    var compra = convert_float($("#compra2").val());
+                    var porc_lucro = $("#porc_lucro2").val();
+                    var venda = parseFloat(compra*porc_lucro/100).toFixed(2)
+                    var venda = parseFloat(parseFloat(compra)+parseFloat(venda)).toFixed(2);
+                    var quantidade = parseFloat($("#quantidade2").val());
+                    var porc = parseFloat($("#porc2").val());
+                    var total_compra = (compra * quantidade).toFixed(2);
+                    var total_venda = (venda * quantidade).toFixed(2);
+
+                    var taxa_valor = taxa(total_compra);
+                    var lucro = (total_venda - total_compra - taxa_valor).toFixed(2);
+                    
+                    if( lucro > 0 ){
+                        $("#labelLucroPerda2").html('Lucro sem taxa');   
+                        $("#labelLucroPerda2").css('color', 'green');
+                    } else if( lucro < 0 ) {
+                        $("#labelLucroPerda2").html('Perda com taxa');
+                        $("#labelLucroPerda2").css('color', 'red');
+                    } else {
+                        $("#labelLucroPerda2").html('Neutro');
+                        $("#labelLucroPerda2").css('color', 'blue');
+                    }
+
+                    $("#venda2").val(venda);
+                    $("#total_compra2").val(total_compra);
+                    $("#total_venda2").val(total_venda);
+                    $("#taxa2").val(taxa_valor);
+                    $("#lucro2").val(lucro);
+
+                    $('#venda2').priceFormat({
+                        prefix: 'R$ ',
+                        centsSeparator: ',',
+                        thousandsSeparator: '.'
+                    });
+
+                    $('#total_compra2').priceFormat({
+                        prefix: 'R$ ',
+                        centsSeparator: ',',
+                        thousandsSeparator: '.'
+                    });
+                    $('#total_venda2').priceFormat({
+                        prefix: 'R$ ',
+                        centsSeparator: ',',
+                        thousandsSeparator: '.'
+                    });
+                    $('#taxa2').priceFormat({
+                        prefix: 'R$ ',
+                        centsSeparator: ',',
+                        thousandsSeparator: '.'
+                    });
+                    $('#lucro2').priceFormat({
+                        prefix: 'R$ ',
+                        centsSeparator: ',',
+                        thousandsSeparator: '.'
+                    });
+
+                });
+
+            });
+
+        </script>
+    </head>
+    <body>
+        <div class="container theme-showcase" role="main">
+            <div class="page-header">
+                <h1>Bolsa de Valores</h1>
+
+                <div class="col-sm-6">
+                    <h3>Calcular Taxa/Lucro</h3>
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                            <p>Quantidade <input type="text" id="quantidade" value="100" ></p>
+                            <p>Compra <input type="text" id="compra"></p>
+                            <p>Venda <input type="text" id="venda"></p>
+                            <p><input type="button" class="btn btn-success" id="calcular" value=" CALCULAR "></p>
+                      </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <h3>Resultados</h3>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <p>Total Compra <input type="text" id="total_compra" disabled="disabled"></p>
+                            <p>Total Venda <input type="text" id="total_venda" disabled="disabled"></p>
+                            <p>Taxa <input type="text" id="taxa" disabled="disabled"></p>
+                            <p>Porcentagem <input type="text" id="porcentagem" disabled="disabled"></p>
+                            <p><span id="labelLucroPerdaTotal">Lucro Total</span> <input type="text" id="lucro_total" disabled="disabled"></p>
+                            <p><span id="labelLucroPerda">Lucro</span> <input type="text" id="lucro" disabled="disabled"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="page-header">
+                <div class="col-sm-6">
+                    <h3>Calcular valor de venda</h3>
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                            <p>Quantidade <input type="text" id="quantidade2" value="100"></p>
+                            <p>Porcetagem Lucro <input type="text" id="porc_lucro2" value="500"></p>
+                            <p>Compra <input type="text" id="compra2"></p>
+                            <p><input type="button" class="btn btn-success" id="calcular2" value=" CALCULAR "></p>
+                      </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <h3>Resultados</h3>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <p>Venda <input type="text" id="venda2"></p>
+                            <p>Total Compra <input type="text" id="total_compra2" disabled="disabled"></p>
+                            <p>Total Venda <input type="text" id="total_venda2" disabled="disabled"></p>
+                            <p>Taxa <input type="text" id="taxa2" disabled="disabled"></p>
+                            <p><span id="labelLucroPerda2">Lucro</span> <input type="text" id="lucro2" disabled="disabled"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </body>
+</html>
